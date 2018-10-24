@@ -1,3 +1,7 @@
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Nasibulin
@@ -6,7 +10,8 @@
  * To change this template use File | Settings | File Templates.
  */
 public class StaffDemoTest {
-    public void testMain() throws Exception {
-
+        @Test
+        public void test01() throws Exception {
+            assertEquals(1, 1);
     }
 }
