@@ -3,9 +3,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -18,7 +17,6 @@ public class StaffDemo {
     private static List<Employee> staff = new ArrayList<Employee>();
     private static HashMap<Integer, String> pos = new HashMap<Integer, String>();
     private static HashMap<Integer, Project> projects = new HashMap<Integer, Project>();
-
     static {
         jobToClass = new HashMap<Integer, String>();
         jobToClass.put(1, "Cleaner");
@@ -33,7 +31,7 @@ public class StaffDemo {
     }
 
     public static void main(
-            String[] args) throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
+            String[] args)  {
         StaffDemo sd = new StaffDemo();
         Employee.setBusinessHours(176);
         sd.importPositions();
@@ -93,12 +91,26 @@ public class StaffDemo {
 
     }
 
+    public String jsonRead() {
+        StringBuilder jsonStrBuilder = new StringBuilder();
+        Scanner inputScanner;
+        try {
+            inputScanner = new Scanner(new File(STAFF_PATH), "UTF-8");
+            while (inputScanner.hasNext())
+                jsonStrBuilder.append(inputScanner.nextLine());
+            inputScanner.close();
+        } catch (FileNotFoundException e) {
+            System.err.println(e.toString());
+        }
+        return jsonStrBuilder.toString();
+    }
+
     public void importPositions() {
         pos.clear();
         JSONParser parser = new JSONParser();
 
         try {
-            Object obj = parser.parse(new FileReader(STAFF_PATH));
+            Object obj = parser.parse(jsonRead());
             JSONObject jsonObject = (JSONObject) obj;
             JSONArray posArray = (JSONArray) jsonObject.get("Positions");
 
@@ -112,14 +124,9 @@ public class StaffDemo {
                 pos.put(id, position);
                 i++;
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
 
     }
 
@@ -128,7 +135,7 @@ public class StaffDemo {
         JSONParser parser = new JSONParser();
 
         try {
-            Object obj = parser.parse(new FileReader(STAFF_PATH));
+            Object obj = parser.parse(jsonRead());
             JSONObject jsonObject = (JSONObject) obj;
             JSONArray posArray = (JSONArray) jsonObject.get("Projects");
 
@@ -143,23 +150,19 @@ public class StaffDemo {
                 projects.put(id, new Project(id, title, budget));
                 i++;
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
 
     }
 
     public void importStaff() {
         staff.clear();
+
         JSONParser parser = new JSONParser();
 
         try {
-            Object obj = parser.parse(new FileReader(STAFF_PATH));
+            Object obj = parser.parse(jsonRead());
             JSONObject jsonObject = (JSONObject) obj;
             JSONArray staffArray = (JSONArray) jsonObject.get("Staff");
 
@@ -195,8 +198,6 @@ public class StaffDemo {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
             e.printStackTrace();
