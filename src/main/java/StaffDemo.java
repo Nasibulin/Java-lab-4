@@ -14,22 +14,22 @@ public class StaffDemo {
     private static final String PACKAGE_PREFIX = "";
     private static final String STAFF_FILE = "Staff.json";
     private static final String STAFF_PATH = System.getProperty("user.dir") + "/db/" + STAFF_FILE;
-    private static HashMap<String, String> jobToClass;
+    private static HashMap<Integer, String> jobToClass;
     private static List<Employee> staff = new ArrayList<Employee>();
     private static HashMap<Integer, String> pos = new HashMap<Integer, String>();
     private static HashMap<Integer, Project> projects = new HashMap<Integer, Project>();
 
     static {
-        jobToClass = new HashMap<String, String>();
-        jobToClass.put("Уборщица", "Cleaner");
-        jobToClass.put("Водитель", "Driver");
-        jobToClass.put("Инженер-программист", "Programmer");
-        jobToClass.put("Ведущий программист", "TeamLeader");
-        jobToClass.put("Инженер по тестированию", "Tester");
-        jobToClass.put("Инженер", "Engineer");
-        jobToClass.put("Менеджер", "Manager");
-        jobToClass.put("Менеджер проекта", "ProjectManager");
-        jobToClass.put("Руководитель направления", "SeniorManager");
+        jobToClass = new HashMap<Integer, String>();
+        jobToClass.put(1, "Cleaner");
+        jobToClass.put(2, "Driver");
+        jobToClass.put(3, "Programmer");
+        jobToClass.put(5, "TeamLeader");
+        jobToClass.put(4, "Tester");
+        jobToClass.put(9, "Engineer");
+        jobToClass.put(8, "Manager");
+        jobToClass.put(6, "ProjectManager");
+        jobToClass.put(7, "SeniorManager");
     }
 
     public static void main(
@@ -180,7 +180,7 @@ public class StaffDemo {
                 int project = ((Long) (staffData.get("project") == null ? 0L : staffData.get(
                         "project"))).intValue();
                 //System.out.println(pos.get(position));
-                Class<?> localstaff = Class.forName(PACKAGE_PREFIX + jobToClass.get(pos.get(position)));
+                Class<?> localstaff = Class.forName(PACKAGE_PREFIX + jobToClass.get(position));
                 Constructor<?> ctor = localstaff.getConstructor(Integer.class, String.class, String.class, Double.class,
                                                                 Integer.class);
 
